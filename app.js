@@ -27,6 +27,8 @@ function updateWeather(data) {
   cloudsElement.innerText = `${data.clouds}%`;
   humidityElement.innerText = `${data.humidity}%`;
   pressureElement.innerText = `${data.pressure} hPa`;
+  const weatherIcon = temperatureElement.querySelector("img");
+  weatherIcon.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png`;
 }
 
 function searchWeather() {
@@ -40,6 +42,7 @@ function searchWeather() {
       response.ok ? response.json() : Promise.reject(response.statusText)
     )
     .then((data) => {
+      console.log(data);
       toggleLoader(false);
       data.city ? updateWeather(data) : triggerShakeEffect();
       valueSearch.value = "";
