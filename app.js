@@ -27,6 +27,10 @@ function updateWeather(data) {
   cloudsElement.innerText = `${data.clouds}%`;
   humidityElement.innerText = `${data.humidity}%`;
   pressureElement.innerText = `${data.pressure} hPa`;
+
+  const weatherIcon = temperatureElement.querySelector("img");
+  const iconCode = data.icon;
+  weatherIcon.src = `http://openweathermap.org/img/wn/${iconCode}@4x.png`;
 }
 
 function searchWeather() {
@@ -41,7 +45,11 @@ function searchWeather() {
     )
     .then((data) => {
       toggleLoader(false);
-      data.city ? updateWeather(data) : triggerShakeEffect();
+      if (data.city && data.icon) {
+        updateWeather(data);
+      } else {
+        triggerShakeEffect();
+      }
       valueSearch.value = "";
     })
     .catch(() => {
