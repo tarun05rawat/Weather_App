@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 const valueSearch = document.getElementById("valueSearch");
 const cityElement = document.getElementById("city");
+const weatherIcon = temperatureElement.querySelector("img");
+const iconCode = data.icon;
 const temperatureElement = document.getElementById("temperature");
 const descriptionElement = document.querySelector(".description");
 const cloudsElement = document.getElementById("clouds");
@@ -27,10 +29,6 @@ function updateWeather(data) {
   cloudsElement.innerText = `${data.clouds}%`;
   humidityElement.innerText = `${data.humidity}%`;
   pressureElement.innerText = `${data.pressure} hPa`;
-
-  const weatherIcon = temperatureElement.querySelector("img");
-  const iconCode = data.icon;
-  weatherIcon.src = `http://openweathermap.org/img/wn/${iconCode}@4x.png`;
 }
 
 function searchWeather() {
@@ -45,11 +43,7 @@ function searchWeather() {
     )
     .then((data) => {
       toggleLoader(false);
-      if (data.city && data.icon) {
-        updateWeather(data);
-      } else {
-        triggerShakeEffect();
-      }
+      data.city ? updateWeather(data) : triggerShakeEffect();
       valueSearch.value = "";
     })
     .catch(() => {
