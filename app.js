@@ -23,15 +23,14 @@ form.addEventListener("submit", (event) => {
 });
 
 const searchWeather = () => {
-  const city = valueSearch.value.trim(); // Trim any leading/trailing whitespace
-  const encodedCity = encodeURIComponent(city); // Properly encode the city name
-  const url = `http://127.0.0.1:8080/weather?city=${encodedCity}`;
+  const city = valueSearch.value.trim();
+  const encodedCity = encodeURIComponent(city);
+  const url = `https://weatherappbackend-production.up.railway.app/weather?city=${encodedCity}`;
 
   toggleLoader(true);
   fetch(url)
     .then((response) => {
       if (!response.ok) {
-        // Read the error message from the response
         return response.text().then((text) => {
           throw new Error(text || `HTTP error! status: ${response.status}`);
         });
@@ -43,7 +42,7 @@ const searchWeather = () => {
       if (data.city) {
         cityElement.querySelector("figcaption").innerText = data.city;
         temperatureElement.querySelector("#temp_value").innerText =
-          Math.round(data.temperature * 10) / 10; // Round to 1 decimal place
+          Math.round(data.temperature * 10) / 10;
         descriptionElement.innerText = data.description;
         cloudsElement.innerText = data.clouds + "%";
         humidityElement.innerText = data.humidity + "%";
@@ -76,10 +75,8 @@ themeToggle.addEventListener("change", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Add dark mode class to the body by default
   document.body.classList.add("dark-mode");
 
-  // Set the toggle to checked by default
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
     themeToggle.checked = true;
@@ -89,7 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = document.getElementById("themeToggle");
 
-  // Check localStorage for saved theme preference
   const darkModeEnabled = localStorage.getItem("darkMode") === "enabled";
   if (darkModeEnabled) {
     document.body.classList.add("dark-mode");
@@ -99,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (themeToggle) themeToggle.checked = false;
   }
 
-  // Listen for toggle changes
   if (themeToggle) {
     themeToggle.addEventListener("change", () => {
       if (themeToggle.checked) {
