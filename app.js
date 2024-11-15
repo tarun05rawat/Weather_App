@@ -48,17 +48,14 @@ const searchWeather = () => {
         humidityElement.innerText = data.humidity + "%";
         pressureElement.innerText = data.pressure + " hPa";
       } else {
-        main.classList.add("error");
-        setTimeout(() => main.classList.remove("error"), 1000);
+        triggerShakeEffect();
       }
       valueSearch.value = "";
     })
     .catch((error) => {
       toggleLoader(false);
       console.error("Fetch error:", error);
-      main.classList.add("error");
-      setTimeout(() => main.classList.remove("error"), 1000);
-      alert(`Error: ${error.message}`);
+      triggerShakeEffect();
     });
 };
 
@@ -70,40 +67,32 @@ initApp();
 
 const themeToggle = document.getElementById("themeToggle");
 
-themeToggle.addEventListener("change", () => {
-  document.body.classList.toggle("dark-mode");
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("dark-mode");
-
-  const themeToggle = document.getElementById("themeToggle");
-  if (themeToggle) {
-    themeToggle.checked = true;
-  }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const themeToggle = document.getElementById("themeToggle");
-
+const applyDarkModeFromStorage = () => {
   const darkModeEnabled = localStorage.getItem("darkMode") === "enabled";
   if (darkModeEnabled) {
     document.body.classList.add("dark-mode");
-    if (themeToggle) themeToggle.checked = true;
+    themeToggle.checked = true;
   } else {
     document.body.classList.remove("dark-mode");
-    if (themeToggle) themeToggle.checked = false;
+    themeToggle.checked = false;
   }
+};
 
-  if (themeToggle) {
-    themeToggle.addEventListener("change", () => {
-      if (themeToggle.checked) {
-        document.body.classList.add("dark-mode");
-        localStorage.setItem("darkMode", "enabled");
-      } else {
-        document.body.classList.remove("dark-mode");
-        localStorage.setItem("darkMode", "disabled");
-      }
-    });
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  applyDarkModeFromStorage();
+
+  themeToggle.addEventListener("change", () => {
+    if (themeToggle.checked) {
+      document.body.classList.add("dark-mode");
+      localStorage.setItem("darkMode", "enabled");
+    } else {
+      document.body.classList.remove("dark-mode");
+      localStorage.setItem("darkMode", "disabled");
+    }
+  });
 });
+
+function triggerShakeEffect() {
+  main.classList.add("error");
+  setTimeout(() => main.classList.remove("error"), 1000);
+}
